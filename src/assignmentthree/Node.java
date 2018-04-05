@@ -11,5 +11,6 @@ package assignmentthree;
  * @author Zach Miller
  */
 public class Node {
-    
+    private int index;
+    private String label;
 }

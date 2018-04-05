@@ -10,12 +10,6 @@ package assignmentthree;
  *
  * @author Zach Miller
  */
-public class Graph { //This is only for weighted, undirected graphs
-    private int nodeCount;
-    private Edge [][] edges;
-    
-    public Graph(int numNodes){
-        nodeCount = numNodes;
-        
-    }
+public class Edge {
+
 }
