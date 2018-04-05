@@ -13,4 +13,31 @@ package assignmentthree;
 public class Node {
     private int index;
     private String label;
+    
+    public Node(String label, int index){
+        label = this.label;
+        index = this.index;
+    }
+    
+    public Node(String label){
+        label = this.label;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    
 }
