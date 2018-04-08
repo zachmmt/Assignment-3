@@ -24,10 +24,14 @@ public class Main {
         //Variables
         char labelChar;
         String line; //Initial, unmodified line from input file
+        String weightString;
         boolean firstLine = true; //So we know to handle letters rather than ints
         int nodesIn; //Calculate number of nodes based on line length
         Graph graph = new Graph();
         Node nextNode;
+        int row = 0;
+        int column = 0;
+        int commaCheck;
         
         
         try {
@@ -52,11 +56,29 @@ public class Main {
                     }
                     firstLine = false;
                 }else{ //Add edges
-                    
+                    column = 0;
+                    while(line != "" && column <6){ //Line still has weights to enter, and we are not out of  bounds of the array
+                        if(line.indexOf(',') == -1){ //The weightString is just the rest of line
+                            weightString = line;
+                        }else{ //Weight is only the next number
+                            weightString = line.substring(0,line.indexOf(','));
+                        }
+                        
+                        if(weightString.equals("-")){ //No adjacency, weight is -1
+                            graph.setEdge(row, column, -1);
+                        }else{
+                            graph.setEdge(row, column, Integer.parseInt(weightString));
+                        }
+                        column ++;
+                        if(line.indexOf(',') == -1){
+                            line = "";
+                        }else{
+                            line = line.substring(line.indexOf(',')+1);
+                        }
+                    }
+                    row ++;
                 }
             }
-            
-            graph.printNodes();
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
