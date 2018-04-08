@@ -12,22 +12,26 @@ package assignmentthree;
  */
 public class Node {
     private int index;
-    private String label;
+    private char label;
     
-    public Node(String label, int index){
-        label = this.label;
-        index = this.index;
+    public Node(char label, int index){
+        this.label = label;
+        this.index = index;
     }
     
-    public Node(String label){
+    public Node(char label){
         label = this.label;
+    }
+    
+    public Node(){
+        
     }
 
     public int getIndex() {
         return index;
     }
 
-    public String getLabel() {
+    public char getLabel() {
         return label;
     }
 
@@ -35,7 +39,7 @@ public class Node {
         this.index = index;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(char label) {
         this.label = label;
     }
     
