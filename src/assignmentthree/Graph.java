@@ -16,9 +16,9 @@ public class Graph {
     private Node [] nodes;
     
     public Graph(){
-        
     }
     
+    //Sets the size of the graph and initializes its matrices
     public void setGraph(int nodeCount){
         this.nodeCount = nodeCount;
         edges = new int [nodeCount][nodeCount];
@@ -34,12 +34,6 @@ public class Graph {
         nodes[i].setIndex(i);
     }
     
-    public void printNodes(){
-        for(int i=0; i<nodeCount; i++){
-            System.out.println("Node " + i + " has label " + nodes[i].getLabel());
-        }
-    }
-    
     public Node getNode(int i){
         return nodes[i];
     }
@@ -50,6 +44,12 @@ public class Graph {
     
     public int getEdge(int row, int column){
         return edges[row][column];
+    }
+    
+    public void printNodes(){
+        for(int i=0; i<nodeCount; i++){
+            System.out.println("Node " + i + " has label " + nodes[i].getLabel());
+        }
     }
     
     public void printMatrix(){
@@ -76,6 +76,7 @@ public class Graph {
             System.out.println();
         }
         
-        System.out.println("-1 denotes non-adjacency");
+        //Note:
+        System.out.println("Notes: -1 denotes non-adjacency");
     }
 }

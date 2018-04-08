@@ -14,17 +14,7 @@ public class Node {
     private int index;
     private char label;
     
-    public Node(char label, int index){
-        this.label = label;
-        this.index = index;
-    }
-    
-    public Node(char label){
-        label = this.label;
-    }
-    
     public Node(){
-        
     }
 
     public int getIndex() {
@@ -42,6 +32,4 @@ public class Node {
     public void setLabel(char label) {
         this.label = label;
     }
-    
-    
 }

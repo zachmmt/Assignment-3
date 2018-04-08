@@ -19,20 +19,27 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        String inPath = "input\\input.cvs";
+        
         
         //Variables
-        char labelChar;
+        Graph graph = new Graph();
+        String inPath = "input\\input.cvs";
+        
+        //String manipulation
         String line; //Initial, unmodified line from input file
         String weightString;
+        
+        //Node manipulation; I had trouble with data actually getting into its object
+        char labelChar;
+        Node nextNode;
+        
+        //Coordinates for edges matrix; needed to add weights
+        int row = 0;
+        int column;
+        
+        //misc
         boolean firstLine = true; //So we know to handle letters rather than ints
         int nodesIn; //Calculate number of nodes based on line length
-        Graph graph = new Graph();
-        Node nextNode;
-        int row = 0;
-        int column = 0;
-        int commaCheck;
-        
         
         try {
             //Setting up reader
@@ -40,7 +47,7 @@ public class Main {
             BufferedReader in = new BufferedReader(FR);
             
             while((line=in.readLine()) != null){
-                if(firstLine){ //Make graph, add vertices
+                if(firstLine){                              //Make graph, add vertices
                     nodesIn = (line.length() + 1)/2;
                     graph.setGraph(nodesIn);
                     while(line.length() > 0){
@@ -55,7 +62,7 @@ public class Main {
                         }
                     }
                     firstLine = false;
-                }else{ //Add edges
+                }else{                                      //Add edges
                     column = 0;
                     while(line != "" && column <6){ //Line still has weights to enter, and we are not out of  bounds of the array
                         if(line.indexOf(',') == -1){ //The weightString is just the rest of line
