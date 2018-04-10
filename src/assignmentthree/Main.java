@@ -24,7 +24,6 @@ public class Main {
         //Variables
         Graph graph = new Graph();
         String inPath = "input\\input.cvs";
-        
         //String manipulation
         String line; //Initial, unmodified line from input file
         String weightString;
@@ -46,10 +45,11 @@ public class Main {
             FileReader FR = new FileReader(inPath);
             BufferedReader in = new BufferedReader(FR);
             
+            //Setting up graph
             while((line=in.readLine()) != null){
                 if(firstLine){                              //Make graph, add vertices
                     nodesIn = (line.length() + 1)/2;
-                    graph.setGraph(nodesIn);
+                    graph.startGraph(nodesIn);
                     while(line.length() > 0){
                         nextNode = new Node();
                         labelChar = line.charAt(0);
@@ -65,27 +65,39 @@ public class Main {
                 }else{                                      //Add edges
                     column = 0;
                     while(line != "" && column <6){ //Line still has weights to enter, and we are not out of  bounds of the array
+                        
+                        //handle text input
                         if(line.indexOf(',') == -1){ //The weightString is just the rest of line
                             weightString = line;
                         }else{ //Weight is only the next number
                             weightString = line.substring(0,line.indexOf(','));
                         }
                         
+                        //insert edge into graph
                         if(weightString.equals("-")){ //No adjacency, weight is -1
-                            graph.setEdge(row, column, -1);
+                            graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), -1));
                         }else{
-                            graph.setEdge(row, column, Integer.parseInt(weightString));
+                            graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), Integer.parseInt(weightString)));
                         }
-                        column ++;
+                        
+                        //test to see if that was the last column
                         if(line.indexOf(',') == -1){
                             line = "";
                         }else{
                             line = line.substring(line.indexOf(',')+1);
                         }
+                        
+                        column ++;
                     }
                     row ++;
                 }
             }
+            
+            //RUN TESTS HERE
+            
+            graph.printMatrix();
+            
+            
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

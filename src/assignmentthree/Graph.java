@@ -12,19 +12,20 @@ package assignmentthree;
  */
 public class Graph {
     private int nodeCount;
-    private int [][] edges;
+    private Edge [][] edges;
     private Node [] nodes;
     
     public Graph(){
     }
     
     //Sets the size of the graph and initializes its matrices
-    public void setGraph(int nodeCount){
+    public void startGraph(int nodeCount){
         this.nodeCount = nodeCount;
-        edges = new int [nodeCount][nodeCount];
+        edges = new Edge [nodeCount][nodeCount];
         nodes = new Node [nodeCount];
     }
     
+    //Adds a node to a non-full(!) graph
     public void addNode(Node a){
         int i = 0;
         while(nodes[i] != null){
@@ -34,24 +35,19 @@ public class Graph {
         nodes[i].setIndex(i);
     }
     
-    public Node getNode(int i){
-        return nodes[i];
+    //Adds an Edge object to the graph (one directional)
+    public void addEdge(Edge edge){
+        edges[edge.getTail().getIndex()][edge.getHead().getIndex()] = edge;
     }
     
-    public void setEdge(int row, int column, int weight){
-        edges[row][column] = weight;
-    }
-    
-    public int getEdge(int row, int column){
-        return edges[row][column];
-    }
-    
+    //Printers
+    //Prints a list of the nodes, index & label
     public void printNodes(){
         for(int i=0; i<nodeCount; i++){
             System.out.println("Node " + i + " has label " + nodes[i].getLabel());
         }
     }
-    
+    //Prints the adjacency matrix of the graph
     public void printMatrix(){
         //Title
         System.out.println("Printing adjacency matrix:");
@@ -68,7 +64,11 @@ public class Graph {
         //Rest of the rows (edges)
         for (int i=0; i<nodeCount; i++){
             for (int j=0; j<nodeCount; j++){
-                System.out.print(edges[i][j]);
+                if(edges[i][j].getWeight() != -1){
+                    System.out.print(edges[i][j].getWeight());
+                }else{
+                    System.out.print("-");
+                }
                 if(j<nodeCount-1){
                     System.out.print(",");
                 }
@@ -77,6 +77,12 @@ public class Graph {
         }
         
         //Note:
-        System.out.println("Notes: -1 denotes non-adjacency");
+        System.out.println("Notes: - denotes non-adjacency");
     }
+    
+    //getters
+    public Node getNode(int i){
+        return nodes[i];
+    }
+    
 }
