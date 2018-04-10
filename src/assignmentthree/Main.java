@@ -78,6 +78,7 @@ public class Main {
                             graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), -1));
                         }else{
                             graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), Integer.parseInt(weightString)));
+                            graph.incEdgeCount();
                         }
                         
                         //test to see if that was the last column

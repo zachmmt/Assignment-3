@@ -7,6 +7,7 @@
 package assignmentthree;
 
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -14,6 +15,7 @@ import java.util.Comparator;
  */
 public class Graph{
     private int nodeCount;
+    private int edgeCount;
     private Edge [][] edges;
     private Node [] nodes;
     
@@ -42,6 +44,11 @@ public class Graph{
         edges[edge.getTail().getIndex()][edge.getHead().getIndex()] = edge;
     }
     
+    //Increases edgeCount by one
+    public void incEdgeCount(){
+        edgeCount++;
+    }
+    
     //Prim's algorith
     public static Graph PrimsMST(Graph G){
         Graph T = new Graph();
@@ -51,16 +58,73 @@ public class Graph{
     
     //Kruskal's algorithm
     public static Graph KruskalsMST(Graph G){
-        //create output graph
-        Graph T = new Graph();
-        
         //generate cluster
         for(int i=0; i<G.getNodeCount(); i++){
             G.getNodeMatrix()[i].setCluster(new NodeCluster(G.getNodeCount()));
-            System.out.println(G.getNodeMatrix()[i].getCluster());
         }
         
-        //priority queue
+        //Initialize priority queue
+        Comparator<Edge> comparator = new EdgeComparator();
+        PriorityQueue<Edge> EdgePQ = new PriorityQueue<>(comparator);
+        
+        //fill priority queue
+        for(int column=1; column<=G.getNodeCount()-1; column++){
+            for(int row=0; row<column; row++){
+                if(G.getEdgeMatrix()[row][column].getWeight() != -1){
+                    EdgePQ.add(G.getEdgeMatrix()[row][column]);
+                }
+            }
+        }
+        
+        //create output graph with nodes (no edges)
+        Graph T = new Graph();
+        T.startGraph(G.getNodeCount());
+        for(int i=0; i<G.getNodeCount(); i++){
+            T.addNode(G.getNode(i));
+        }
+        
+        //adding nodes and merging clusters
+        while(T.getEdgeCount() < T.getNodeCount()-1){
+            if(EdgePQ.isEmpty()){ //We have run out of edges, and the graph is still unconnected: no MST
+                System.out.println("There is no MST");
+                break;
+            }else{ //We have an edge and need to check it out
+                Edge nextEdge = EdgePQ.poll();
+                Node nextTail = nextEdge.getTail();
+                Node nextHead = nextEdge.getHead();
+                if(nextTail.getCluster() != nextHead.getCluster()){ //These clusters are unconnected. Add edge to MST
+                    for(int i=0; i<T.nodeCount; i++){ //move all nodes to new cluster
+                        if(nextTail.getCluster().getNode(i) != null){
+                            nextTail.getCluster().getNode(i).setCluster(nextHead.getCluster());
+                            nextHead.getCluster().addNode(nextTail.getCluster().getNode(i));
+                        }
+                    }
+                    
+                    //add edge to graph
+                    T.addEdge(nextEdge);
+                    Edge reverse = new Edge(nextEdge.getHead(), nextEdge.getTail(), nextEdge.getWeight());
+                    T.addEdge(reverse);
+                    T.incEdgeCount();
+                }
+            }
+        }
+        
+        //Fill in empty and self edges
+        for(int row=0; row<T.nodeCount; row++){
+            for(int column=0; column<T.nodeCount; column++){
+                if(T.getEdge(row, column) == null){
+                    if(row == column){ //connects node to self: weight=0
+                        Edge selfEdge = new Edge(T.getNode(row), T.getNode(row), 0);
+                        T.addEdge(selfEdge);
+                    }else{
+                        Edge falseEdge =  new Edge(T.getNode(row), T.getNode(column), -1);
+                        T.addEdge(falseEdge);
+                    }
+                }
+            }
+        }
+        
+        T.printMatrix();
         
         return T;
     }
@@ -114,6 +178,15 @@ public class Graph{
     }
     public int getNodeCount(){
         return nodeCount;
+    }
+    public Edge [][] getEdgeMatrix(){
+        return edges;
+    }
+    public int getEdgeCount(){
+        return edgeCount;
+    }
+    public Edge getEdge(int row, int column){
+        return edges[row][column];
     }
 
 }
