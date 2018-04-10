@@ -64,7 +64,7 @@ public class Main {
                     firstLine = false;
                 }else{                                      //Add edges
                     column = 0;
-                    while(line != "" && column <6){ //Line still has weights to enter, and we are not out of  bounds of the array
+                    while(line != "" && column <graph.getNodeCount()){ //Line still has weights to enter, and we are not out of  bounds of the array
                         
                         //handle text input
                         if(line.indexOf(',') == -1){ //The weightString is just the rest of line
@@ -74,9 +74,9 @@ public class Main {
                         }
                         
                         //insert edge into graph
-                        if(weightString.equals("-")){ //No adjacency, weight is -1
-                            graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), -1));
-                        }else{
+                        if(weightString.equals("-")){ //No adjacency, weight is Integer.MAX_VALUE
+                            graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), Integer.MAX_VALUE));
+                        }else{  //Are adjacent, add Edge
                             graph.addEdge(new Edge(graph.getNode(row), graph.getNode(column), Integer.parseInt(weightString)));
                             graph.incEdgeCount();
                         }
@@ -94,9 +94,26 @@ public class Main {
                 }
             }
             
-            //RUN TESTS HERE
             
-            Graph MST = Graph.KruskalsMST(graph);
+            
+            //RUN TESTS HERE
+            Graph MST;
+            Graph FW;
+            System.out.println("Printing input graph.");
+            graph.printMatrix();
+            
+            //Test Prims
+            MST = Graph.PrimsMST(graph);
+            //System.out.println("Printing Prim's MST of input graph");
+            //MST.printMatrix();
+            
+            //Test Kruskals
+//            MST = Graph.KruskalsMST(graph);
+//            System.out.println("Printing Kruskal's MST of input graph");
+//            MST.printMatrix();
+            
+            //Test Floyd-Warshall
+            //FW = Graph.floydWarshallsSP(graph);
             
             
             

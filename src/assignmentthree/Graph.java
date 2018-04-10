@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package assignmentthree;
 
 import java.util.Comparator;
@@ -49,7 +43,10 @@ public class Graph{
         edgeCount++;
     }
     
-    //Prim's algorith
+    //Creates a copy of a Graph
+    
+    //Algorithms
+    //Prim's algorithm
     public static Graph PrimsMST(Graph G){
         Graph T = new Graph();
         
@@ -70,7 +67,7 @@ public class Graph{
         //fill priority queue
         for(int column=1; column<=G.getNodeCount()-1; column++){
             for(int row=0; row<column; row++){
-                if(G.getEdgeMatrix()[row][column].getWeight() != -1){
+                if(G.getEdgeMatrix()[row][column].getWeight() != Integer.MAX_VALUE){
                     EdgePQ.add(G.getEdgeMatrix()[row][column]);
                 }
             }
@@ -83,9 +80,12 @@ public class Graph{
             T.addNode(G.getNode(i));
         }
         
-        //adding nodes and merging clusters
+        //adding nodes, merging clusters, printing edges
+        System.out.print("Edges in Kruskal's MST are: ");
+        boolean firstEdge = true;
         while(T.getEdgeCount() < T.getNodeCount()-1){
             if(EdgePQ.isEmpty()){ //We have run out of edges, and the graph is still unconnected: no MST
+                System.out.println();
                 System.out.println("There is no MST");
                 break;
             }else{ //We have an edge and need to check it out
@@ -100,14 +100,22 @@ public class Graph{
                         }
                     }
                     
+                    if(!firstEdge){
+                        System.out.print(", ");
+                    }
+                    
                     //add edge to graph
                     T.addEdge(nextEdge);
                     Edge reverse = new Edge(nextEdge.getHead(), nextEdge.getTail(), nextEdge.getWeight());
                     T.addEdge(reverse);
                     T.incEdgeCount();
+                    System.out.print(nextEdge.getTail().getLabel());
+                    System.out.print(nextEdge.getHead().getLabel());
+                    firstEdge = false;
                 }
             }
         }
+        System.out.println();
         
         //Fill in empty and self edges
         for(int row=0; row<T.nodeCount; row++){
@@ -117,14 +125,58 @@ public class Graph{
                         Edge selfEdge = new Edge(T.getNode(row), T.getNode(row), 0);
                         T.addEdge(selfEdge);
                     }else{
-                        Edge falseEdge =  new Edge(T.getNode(row), T.getNode(column), -1);
+                        Edge falseEdge =  new Edge(T.getNode(row), T.getNode(column), Integer.MAX_VALUE);
                         T.addEdge(falseEdge);
                     }
                 }
             }
         }
+        return T;
+    }
+    
+    //FloydWarshallsSP
+    public static Graph floydWarshallsSP(Graph G){
         
+        //create output graph with nodes (no edges)
+        Graph T = new Graph();
+        T.startGraph(G.getNodeCount());
+        for(int i=0; i<G.getNodeCount(); i++){
+            T.addNode(G.getNode(i));
+        }
+        
+        //Copy edges from G
+        for(int row=0; row<T.getNodeCount(); row++){
+            for(int column=0; column<T.getNodeCount(); column++){
+                T.addEdge(new Edge(G.getNode(row), G.getNode(column), G.getEdge(row,column).getWeight()));
+            }
+        }
+        
+        //Begin output
+        System.out.println("Begin Floyd-Warshall process");
+        System.out.println();
+        System.out.println("Copied graph:");
         T.printMatrix();
+        
+        //move connections from G to T
+        for(int k=0; k<T.getNodeCount(); k++){
+            for(int i=0; i<T.getNodeCount(); i++){
+                for(int j=0; j<T.getNodeCount(); j++){
+                    if(T.getEdge(i,k).getWeight() != Integer.MAX_VALUE && T.getEdge(k,j).getWeight() != Integer.MAX_VALUE){
+                        if(T.getEdge(i,j).getWeight() > T.getEdge(i,k).getWeight() + T.getEdge(k,j).getWeight()){
+                            T.getEdge(i,j).setWeight(T.getEdge(i,k).getWeight() + T.getEdge(k,j).getWeight());
+
+                            //Print adjacency matrix for every iteration it changes
+                            System.out.println("Iteration (i,j,k): " + "(" + i + "," + j + "," + k + ")");
+                            T.printStepMatrix(i,j);
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
         
         return T;
     }
@@ -153,7 +205,7 @@ public class Graph{
         //Rest of the rows (edges)
         for (int i=0; i<nodeCount; i++){
             for (int j=0; j<nodeCount; j++){
-                if(edges[i][j].getWeight() != -1){
+                if(edges[i][j].getWeight() != Integer.MAX_VALUE){
                     System.out.print(edges[i][j].getWeight());
                 }else{
                     System.out.print("-");
@@ -166,7 +218,54 @@ public class Graph{
         }
         
         //Note:
-        System.out.println("Note: - denotes non-adjacency");
+        //System.out.println("Note: - denotes non-adjacency, 0 denotes (imaginary) self edge");
+        System.out.println();
+    }
+    
+    //puts a * before and after the changed edge (step matrix)
+    public void printStepMatrix(int row, int column){
+        //Title
+        System.out.println("Printing step adjacency matrix:");
+        
+        //First row (nodes)
+        for(int i=0; i<nodeCount; i++){
+            System.out.print(nodes[i].getLabel());
+            if(i<nodeCount-1){
+                System.out.print(",");
+            }
+        }
+        System.out.println();
+        
+        //Rest of the rows (edges)
+        for (int i=0; i<nodeCount; i++){
+            for (int j=0; j<nodeCount; j++){
+                
+                //change marker 1
+                if(i==row && j==column){
+                    System.out.print("*");
+                }
+                
+                //print value
+                if(edges[i][j].getWeight() != Integer.MAX_VALUE){
+                    System.out.print(edges[i][j].getWeight());
+                }else{
+                    System.out.print("-");
+                }
+                
+                //change marker 2 and optional comma
+                if(i==row && j==column){
+                    System.out.print("*");
+                }
+                if(j<nodeCount-1){
+                    System.out.print(",");
+                }
+            }
+            System.out.println();
+        }
+        
+        //Note:
+        //System.out.println("Note: - denotes non-adjacency, 0 denotes (imaginary) self edge");
+        System.out.println();
     }
     
     //getters
