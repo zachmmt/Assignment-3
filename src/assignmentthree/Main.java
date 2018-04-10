@@ -1,3 +1,12 @@
+/*Authors: Ryan Hansen and Zach Miller
+* Date: due, submitted 4/10/18
+* Overview: This program constructs a graph from an input adjacency
+*           matrix in the form of a comma separated file. It then demonstrates
+*           Prim's, Kustal's, and Floyd-Warshall's Algorithms. Controls
+*           for the program are found at Main.java line 102. Inputs can
+*           be controlled by editing input\\input.cvs.
+*/
+
 package assignmentthree;
 
 import java.io.BufferedReader;
@@ -7,12 +16,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*Authors: Ryan Hansen and Zach Miller
-* Date: due, submitted 4/11/18
-* Overview: This program constructs a graph from an input adjacency
-*           matrix in the form of a comma separated file. It then demonstrates
-*           Prim's, Kustal's, and Floyd-Warshall's Algorithms.
-*/
 public class Main {
 
     /**
@@ -97,6 +100,16 @@ public class Main {
             
             
             //RUN TESTS HERE
+            
+            /*
+            The algorithm methods probably need somewhat nice graphs put in.
+            They definitely need to be formatted correctly, as in the current input file.
+            Inputs can be controlled by editing input\\input.cvs.
+            Comment lines 119-121 to stop testing Prim's.
+            Uncomment lines 124-126 to test Kruskal's.
+            Uncomment line 129 to test Floyd-Warshall's.
+            */
+            
             Graph MST;
             Graph FW;
             System.out.println("Printing input graph.");
@@ -104,17 +117,20 @@ public class Main {
             
             //Test Prims
             MST = Graph.PrimsMST(graph);
-            //System.out.println("Printing Prim's MST of input graph");
-            //MST.printMatrix();
+            System.out.println("Printing Prim's MST of input graph");
+            MST.printMatrix();
             
             //Test Kruskals
-//            MST = Graph.KruskalsMST(graph);
-//            System.out.println("Printing Kruskal's MST of input graph");
-//            MST.printMatrix();
+            //MST = Graph.KruskalsMST(graph);
+            //System.out.println("Printing Kruskal's MST of input graph");
+            //MST.printMatrix();
             
             //Test Floyd-Warshall
             //FW = Graph.floydWarshallsSP(graph);
             
+            
+            //Directions output:
+            System.out.println("TO TEST OTHER ALGORITHMS, CONTROLS ARE FOUND AT MAIN.JAVA LINE 102.");
             
             
         } catch (FileNotFoundException ex) {

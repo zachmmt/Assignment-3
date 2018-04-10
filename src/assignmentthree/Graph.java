@@ -1,12 +1,17 @@
+/*Authors: Ryan Hansen and Zach Miller
+* Date: due, submitted 4/10/18
+* Overview: This program constructs a graph from an input adjacency
+*           matrix in the form of a comma separated file. It then demonstrates
+*           Prim's, Kustal's, and Floyd-Warshall's Algorithms. Controls
+*           for the program are found at Main.java line 102. Inputs can
+*           be controlled by editing input\\input.cvs.
+*/
+
 package assignmentthree;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-/**
- *
- * @author Zach Miller
- */
 public class Graph{
     private int nodeCount;
     private int edgeCount;
@@ -45,10 +50,56 @@ public class Graph{
     
     //Creates a copy of a Graph
     
+    
     //Algorithms
     //Prim's algorithm
     public static Graph PrimsMST(Graph G){
+        //Set primKeys
+        G.getNode(0).setPrimKey(0);
+        for(int i=1; i<G.getNodeCount(); i++){
+            G.getNode(i).setPrimKey(Integer.MAX_VALUE);
+        }
+        
+        
+        
+        //Initialize priority queue
+        Comparator<Node> comparator = new NodeComparator();
+        PriorityQueue<Node> NodePQ = new PriorityQueue<>(comparator);
+        for(int i=0; i<G.getNodeCount(); i++){
+            NodePQ.add(G.getNode(i));
+        }
+        
+        //Initialize T with nodes
         Graph T = new Graph();
+        T.startGraph(G.getNodeCount());
+        for(int i=0; i<G.getNodeCount(); i++){
+            T.addNode(G.getNode(i));
+        }
+        
+        //Prim's process
+        while(!NodePQ.isEmpty()){
+            Node u = NodePQ.poll();
+            for(int column=0; column<G.getNodeCount(); column++){
+                Node v = G.getEdge(u.getIndex(), column).getHead();
+                if(NodePQ.contains(v) && G.getEdge(u.getIndex(), v.getIndex()).getWeight() < v.getPrimKey()){
+                    T.addEdge(new Edge(u, v, G.getEdge(u.getIndex(), v.getIndex()).getWeight()));
+                    v.setPrimKey(G.getEdge(u.getIndex(), v.getIndex()).getWeight());
+                }
+            }
+        }
+        
+        //Fill in self and non-existent edges
+        for(int r=0; r<T.getNodeCount(); r++){
+            for(int c=0; c<T.getNodeCount(); c++){
+                if(T.getEdge(r,c) == null){     //didn't receive an edge
+                    if(r==c){                   //self edge
+                        T.addEdge(new Edge(T.getNode(r), T.getNode(c), 0));
+                    }else{
+                        T.addEdge(new Edge(T.getNode(r), T.getNode(c), Integer.MAX_VALUE));
+                    }
+                }
+            }
+        }
         
         return T;
     }
