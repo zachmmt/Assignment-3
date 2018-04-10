@@ -95,7 +95,7 @@ public class Main {
             
             //RUN TESTS HERE
             
-            graph.printMatrix();
+            Graph MST = Graph.KruskalsMST(graph);
             
             
             

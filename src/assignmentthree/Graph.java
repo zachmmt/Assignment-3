@@ -6,11 +6,13 @@
 
 package assignmentthree;
 
+import java.util.Comparator;
+
 /**
  *
  * @author Zach Miller
  */
-public class Graph {
+public class Graph{
     private int nodeCount;
     private Edge [][] edges;
     private Node [] nodes;
@@ -38,6 +40,29 @@ public class Graph {
     //Adds an Edge object to the graph (one directional)
     public void addEdge(Edge edge){
         edges[edge.getTail().getIndex()][edge.getHead().getIndex()] = edge;
+    }
+    
+    //Prim's algorith
+    public static Graph PrimsMST(Graph G){
+        Graph T = new Graph();
+        
+        return T;
+    }
+    
+    //Kruskal's algorithm
+    public static Graph KruskalsMST(Graph G){
+        //create output graph
+        Graph T = new Graph();
+        
+        //generate cluster
+        for(int i=0; i<G.getNodeCount(); i++){
+            G.getNodeMatrix()[i].setCluster(new NodeCluster(G.getNodeCount()));
+            System.out.println(G.getNodeMatrix()[i].getCluster());
+        }
+        
+        //priority queue
+        
+        return T;
     }
     
     //Printers
@@ -77,12 +102,18 @@ public class Graph {
         }
         
         //Note:
-        System.out.println("Notes: - denotes non-adjacency");
+        System.out.println("Note: - denotes non-adjacency");
     }
     
     //getters
     public Node getNode(int i){
         return nodes[i];
     }
-    
+    public Node [] getNodeMatrix(){
+        return this.nodes;
+    }
+    public int getNodeCount(){
+        return nodeCount;
+    }
+
 }
