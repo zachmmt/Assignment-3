@@ -9,6 +9,7 @@
 
 package assignmentthree;
 
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -44,6 +45,19 @@ public class Main {
         int nodesIn; //Calculate number of nodes based on line length
         
         try {
+            
+            
+            //user input for choosing algorithm
+
+            Scanner reader = new Scanner(System.in);  // Reading from System.in
+            System.out.println("Choose your algorithm by typing into the Output.");
+            System.out.println("'1' for Prim's");
+            System.out.println("'2' for Kruskal's");
+            System.out.println("'3' for Floyd-Warshall's");
+            int n = reader.nextInt(); // Scans the next token of the input as an int.
+            reader.close();
+            
+            
             //Setting up reader
             FileReader FR = new FileReader(inPath);
             BufferedReader in = new BufferedReader(FR);
@@ -105,9 +119,6 @@ public class Main {
             The algorithm methods probably need somewhat nice graphs put in.
             They definitely need to be formatted correctly, as in the current input file.
             Inputs can be controlled by editing input\\input.cvs.
-            Comment lines 119-121 to stop testing Prim's.
-            Uncomment lines 124-126 to test Kruskal's.
-            Uncomment line 129 to test Floyd-Warshall's.
             */
             
             Graph MST;
@@ -115,22 +126,37 @@ public class Main {
             System.out.println("Printing input graph.");
             graph.printMatrix();
             
+            
+            
+            
+            switch (n) {
+                      
             //Test Prims
-            MST = Graph.PrimsMST(graph);
-            System.out.println("Printing Prim's MST of input graph");
-            MST.printMatrix();
-            
+                case 1:
+                    System.out.println("Printing Prim's MST of input graph");
+                    Prim inter1 = new Prim(graph);
+                    MST = inter1.PrimsMST();
+                    MST.printMatrix();
+                    break;
+                
             //Test Kruskals
-            //MST = Graph.KruskalsMST(graph);
-            //System.out.println("Printing Kruskal's MST of input graph");
-            //MST.printMatrix();
+                case 2:
+                    System.out.println("Printing Kruskal's MST of input graph");
+                    Kruskal inter2 = new Kruskal(graph);
+                    MST = inter2.KruskalsMST();
+                    MST.printMatrix();
+                    break;
             
-            //Test Floyd-Warshall
-            //FW = Graph.floydWarshallsSP(graph);
-            
-            
-            //Directions output:
-            System.out.println("TO TEST OTHER ALGORITHMS, CONTROLS ARE FOUND AT MAIN.JAVA LINE 102.");
+            //Test Floyd-Warshall  
+                case 3:
+                    System.out.println("Printing Floyd-Warshall");
+                    Floyd inter3 = new Floyd(graph);
+                    inter3.floydWarshallsSP();
+                    break;
+                default:
+                    System.out.println("Invalid Algorithm Selection");
+
+            }
             
             
         } catch (FileNotFoundException ex) {
